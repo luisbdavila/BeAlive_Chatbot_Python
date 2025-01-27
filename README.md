@@ -34,6 +34,7 @@ The document outlines the following sections:
 │   └── DB_SCHEMA.png         # Image of the database schema.
 ├── Guidelines/               # Folder guidelines of the work and drafts.
 ├── .gitignore                # Default ignore file.
+├── .env                      # Enviroment file with the API keys.
 ├── app.py                    # Main streamlit application script.
 ├── README.md                 # Comprehensive project documentation.
 ├── requirements.txt          # Python dependencies.
@@ -146,6 +147,8 @@ To register a new user you will need to:
 1. Open VSCode, choose the project directory and run the following command on the terminal: python -m streamlit run app.py. This will direct you to a local webpage;
 2. In the webpage, go to the Registration page and insert the necessary information, a new user will then be created.
 3. To check if the new user was correctly registred, go to the Login page and login with the credentials you just created.
+
+You need to update the .env file with an OpenAI key to run the chatbot and a Pinecone key that contains the activities index and the company information index.
 
 ## 5. Database Schema
 
