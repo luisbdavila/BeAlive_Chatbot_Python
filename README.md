@@ -78,7 +78,8 @@ The document outlines the following sections:
   
   Users can also learn more about BeAlive through AIventure.
 
-  [BeAlive Demo]([https://www.youtube.com/watch?v=StTqXEQ2l-Y](https://youtu.be/HGoJ4vURwF0) "Demo/Presentation Chatbot")
+  ![BeAlive Demo]([https://www.youtube.com/watch?v=StTqXEQ2l-Y](https://youtu.be/HGoJ4vURwF0) "Demo/Presentation Chatbot") 
+  *Video: Demo/Presentation Chatbot*
 
 ---
 ## 2. Webpage Description
