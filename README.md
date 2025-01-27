@@ -8,19 +8,20 @@ The document outlines the following sections:
 
 **1. Project Overview:** A description of BeALive, AIventure and their purpose.
 
-**2. How to Test the Chatbot:** The needed prerequisites to run the chatbot and how to run it.
+**2. Webpage Description:** Show the content of each webpage.
 
-**3. Database Schema:** An overview of the database and schema design.
+**3. Code Implementation:** Important notes to help in case of further code development.
 
-**4. User Intentions:** The intentions that were implemented and how to test them.
+**4. How to Test the Chatbot:** The needed prerequisites to run the chatbot and how to run it.
 
-**5. Intention Router:** A description of how the intention router and the semantic router work and the post-processing techniques used to improve accuracy.
+**5. Database Schema:** An overview of the database and schema design.
 
-**6. Intention Router Accuracy Testing Results:** Demonstrates router accuracy in identifying user intentions with metrics reported for each intention and the final results.
+**6. User Intentions:** The intentions that were implemented and how to test them.
 
-**7. Webpage Description:** Show the content of each webpage.
+**7. Intention Router:** A description of how the intention router and the semantic router work and the post-processing techniques used to improve accuracy.
 
-**8. Code Implementation:** Important notes to help in case of further code development.
+**8. Intention Router Accuracy Testing Results:** Demonstrates router accuracy in identifying user intentions with metrics reported for each intention and the final results.
+
 
 ## 0. Repository Structure
 
@@ -31,6 +32,7 @@ The document outlines the following sections:
 ├── images/                   # Folder with images.
 │   ├── Logo.jpeg             # Company Logo.
 │   └── DB_SCHEMA.png         # Image of the database schema.
+├── Guidelines/               # Folder guidelines of the work and drafts.
 ├── .gitignore                # Default ignore file.
 ├── app.py                    # Main streamlit application script.
 ├── README.md                 # Comprehensive project documentation.
@@ -76,11 +78,49 @@ The document outlines the following sections:
   
   Users can also learn more about BeAlive through AIventure.
 
+  (DEMO)
+
+---
+## 2. Webpage Description
+
+To have a nice UI/UX that users can use we develop the following pages on **streamlit**:
+
++ **Registration Page:** To register a new user.
++ **Login Page:** To login using username and password.
++ **Chatbot Page:** To interact with the chatbot.
++ **Instructions Page:** to know what and how you can interact with the chatbot.
++ **Calendar Page:** To show your activities and the ones that you are confirmed to attend.
++ **About Us Page:** A small description of the company.
++ **Account Page:** To see your user details, update them, log-out and also delete your account.
+
+When you are logged in, you have access to the chatbot, instructions, calendar, about us and the account pages.
+
+When you are not logged in you only have access to the instructions, about us, login and registration pages.
+
+---
+## 3. Code Implementation
+
+We divided the code into the folder structure stated in “0. Repository Structure”, now we will state important facts about the implementation to help in case of further code development.
+
++ The chatbot was implemented using the **Langchain framework and OpenAI**, to work with relational databases using **SQLite**, to work with vector databases **Pinecone** was used (to encode the vector into embedding we use the **"text-embedding-3-small"** model), to perform sentiment analysis **transformers** (from **Hugging Face**, and we use the **"distilbert-base-uncased-finetuned-sst-2-english"**) library was used.
+
++ The important variables of the code used are saved into the streamlit session to not lose them during the interactions, variables like: the chatbot, conversation messages, login status and user information.
+
++ The chatbot function is in the following structure: receive the input form the user > goes through router chain to extract the user intention > goes to the reasoning chain to extract the relevant fields given the user intention > is redirected to the chain or agent that will complete the desired task > return a string/text.
+
++ The chatbot uses one **ConversationBufferWindowMemory** storing the past 4 interactions, combined with a **ConversationSummaryMemory** to capture the whole user-chatbot interaction, and is updated every time a chatbot or user sends a message.
+
++ The **memory** is only access by the router and reasoning chain since the rest of the chains and agents receiving the necessary information from these 2 can work excellent, and if the information is not found by these 2 chains, it means that the user should be more clear referring what he wants.
+
++ The chains and tools tend to use auxiliary chains to extract specific information from the input.
+
++ Some user intentions are simply a chain, but others are structured in agents that use tools to achieve the necessary results. The intentions of **Check Activity Participants**, **Check Activity Reviews** and **Check Number of Reservations** are tools of the same agent; the intentions of **Review Activity** and **Review User** are tools of the same agent; and finally the intentions of **Make a Reservation**, **Reject Reservation**, **Accept Reservation** are tools of the same agent. The rest of the intentions are just chains.
+
 ---
 
-## 2. How to Test the Chatbot
+## 4. How to Test the Chatbot
 
-### 2.1 Prerequisites
+### 4.1 Prerequisites
 
 - **Python Version**: 3.12.7
 - All required libraries and frameworks are listed in the requirements.txt file.
@@ -95,7 +135,7 @@ To setup a conda environment you will need to:
 5. Type pip install -r requirements.txt, to install all required libraries;
 6. Open VSCode, choose the project directory and select the correct environment.
 
-### 2.2 How to Run the Chatbot
+### 4.2 How to Run the Chatbot
 
 To lauch AIventure you will need to:
 1. Open VSCode, choose the project directory and run the following command on the terminal: python -m streamlit run app.py. This will direct you to a local webpage;
@@ -107,9 +147,9 @@ To register a new user you will need to:
 2. In the webpage, go to the Registration page and insert the necessary information, a new user will then be created.
 3. To check if the new user was correctly registred, go to the Login page and login with the credentials you just created.
 
-## 3. Database Schema
+## 5. Database Schema
 
-### 3.1 Database Overview and Schema Diagram
+### 5.1 Database Overview and Schema Diagram
 
 The database used by the chatbot was designed to manage user-host activities, reservations and reviews. It consists of five interconnected tables: **users**, **activities**, **reservations**, **review_user** and **review_activity**. 
 
@@ -117,7 +157,7 @@ The database used by the chatbot was designed to manage user-host activities, re
 
 These tables support the following functionalities: user registration, activity creation, reservation tracking and reviews collection. The **users** table is the core of the database. The **activities** table is then connected to the previous table through the host of an activity and the **reservations** table is also connected to **users** through the participants of the activity in question. The **review_user** and **review_activity** tables are connected to **reservations**, the first through the host and the activity and the second through the participants and the activity. This schema ensures that the system is able to handle complex interactions while maintaining data integrity.
 
-### 3.2 Table Descriptions
+### 5.2 Table Descriptions
 
 - **users**: This table stores all the information needed from a user to allow personalized recommendations and contacts points. It is composed by ten columns:
   - user_id: It is the unique identifier of an user. It is an integer and a primary key.
@@ -168,9 +208,9 @@ These tables support the following functionalities: user registration, activity 
 
 ---
 
-## 4. User Intentions
+## 6. User Intentions
 
-### 4.1 Implemented Intentions
+### 6.1 Implemented Intentions
 
 AIventure is designed to be able to handle the following user intentions:
 
@@ -190,7 +230,7 @@ AIventure is designed to be able to handle the following user intentions:
 
 
 
-### 4.2 How to Test Each Intention
+### 6.2 How to Test Each Intention
 
 **Notes:** 
 + If you are trying to use or test the chatbot or something on the page and there is an error, please reload the page or repeat the action and it should work. 
@@ -360,21 +400,21 @@ The chatbot should answer politely and the answer should not be related nor refe
 
 ---
 
-## 5. Intention Router
+## 7. Intention Router
 
-### 5.1 Intention Router Implementation
+### 7.1 Intention Router Implementation
 
 - **Message Generation**:
   
   Our messages were generated synthetically. Where we defined each possible intention, including the None intention and then with Chat Open AI with the model gpt-4o-mini we generated 50 prompts for each user intention. After generating the messages they where stored in a Json file.
 
-### 5.2 Semantic Router Training
+### 7.2 Semantic Router Training
 
 - **Hyperparameters**:
   
   The encoder chosen was the Hugging Face encoder, with the default values for selecting the results, which is top_k = 5 and the aggregation function being the sum.
 
-### 5.3 Post-Processing for Accuracy Improvement
+### 7.3 Post-Processing for Accuracy Improvement
 
 - **Post-Processing Techniques**:
   
@@ -382,7 +422,7 @@ The chatbot should answer politely and the answer should not be related nor refe
 
 ---
 
-## 6. Intention Router Accuracy Testing Results
+## 8. Intention Router Accuracy Testing Results
 
 ### Methodology
 
@@ -442,41 +482,3 @@ Presenting the accuracy results in the test set in a table format:
 | delete_activities         | 5           | 5       | 0         | 100%         |
 | **Average Accuracy**      | 61          | 60      | 1         | 98.36%       |
 
----
-## 7. Webpage Description
-
-To have a nice UI/UX that users can use we develop the following pages on **streamlit**:
-
-+ **Registration Page:** To register a new user.
-+ **Login Page:** To login using username and password.
-+ **Chatbot Page:** To interact with the chatbot.
-+ **Instructions Page:** to know what and how you can interact with the chatbot.
-+ **Calendar Page:** To show your activities and the ones that you are confirmed to attend.
-+ **About Us Page:** A small description of the company.
-+ **Account Page:** To see your user details, update them, log-out and also delete your account.
-
-When you are logged in, you have access to the chatbot, instructions, calendar, about us and the account pages.
-
-When you are not logged in you only have access to the instructions, about us, login and registration pages.
-
----
-## 8. Code Implementation
-
-We divided the code into the folder structure stated in “0. Repository Structure”, now we will state important facts about the implementation to help in case of further code development.
-
-+ The chatbot was implemented using the **Langchain framework and OpenAI**, to work with relational databases using **SQLite**, to work with vector databases **Pinecone** was used (to encode the vector into embedding we use the **"text-embedding-3-small"** model), to perform sentiment analysis **transformers** (from **Hugging Face**, and we use the **"distilbert-base-uncased-finetuned-sst-2-english"**) library was used.
-
-+ The important variables of the code used are saved into the streamlit session to not lose them during the interactions, variables like: the chatbot, conversation messages, login status and user information.
-
-+ The chatbot function is in the following structure: receive the input form the user > goes through router chain to extract the user intention > goes to the reasoning chain to extract the relevant fields given the user intention > is redirected to the chain or agent that will complete the desired task > return a string/text.
-
-+ The chatbot uses one **ConversationBufferWindowMemory** storing the past 4 interactions, combined with a **ConversationSummaryMemory** to capture the whole user-chatbot interaction, and is updated every time a chatbot or user sends a message.
-
-+ The **memory** is only access by the router and reasoning chain since the rest of the chains and agents receiving the necessary information from these 2 can work excellent, and if the information is not found by these 2 chains, it means that the user should be more clear referring what he wants.
-
-+ The chains and tools tend to use auxiliary chains to extract specific information from the input.
-
-+ Some user intentions are simply a chain, but others are structured in agents that use tools to achieve the necessary results. The intentions of **Check Activity Participants**, **Check Activity Reviews** and **Check Number of Reservations** are tools of the same agent; the intentions of **Review Activity** and **Review User** are tools of the same agent; and finally the intentions of **Make a Reservation**, **Reject Reservation**, **Accept Reservation** are tools of the same agent. The rest of the intentions are just chains.
-```
-
-```
