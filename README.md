@@ -1,5 +1,8 @@
 # BeAlive
 
+Page: https://bealive.streamlit.app/
+(The chatbot page is not functional since the APIs for OpenAI and Pinecone are missing in the .env file)
+
 This README.md is designed to provide a clear and structured guide to understand AIventure. It provides a comprehensive overview of the project functionalities, setup process and testing methodology so that team members and future contributors can easily understand, maintain and extend AIventure.
 
 The document outlines the following sections:
